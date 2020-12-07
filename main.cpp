@@ -3,19 +3,18 @@
 #include <random>
 #include <vector>
 #include <algorithm>
-//*****************
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
 bool print = true;
+//const int m = 100; //max 10000
 using namespace std;
 //вывод графа- матрицы в консоль
 void print_graph(bool** matrix, int n) {
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
+		for (int j = 0; j < n; j++)
 			cout << matrix[i][j] << " ";
-		}
 		cout << endl;
 	}
 	cout << endl;
@@ -24,9 +23,8 @@ void print_graph(bool** matrix, int n) {
 void print_graph(vector<vector<int>>& x, int n) {
 	for (int i = 0; i < n; i++) {
 		cout << i << ": ";
-		for (int j = 0; j < x[i].size(); j++) {
+		for (int j = 0; j < x[i].size(); j++)
 			cout << x[i][j] << " ";
-		}
 		cout << endl;
 	}
     cout << endl;
@@ -94,6 +92,7 @@ void generate_graph(bool** matrix, int n, int edges) {
     matrix[half][half - 1] = true;
     matrix[half - 1][half] = true;
 }
+
 //Вывод в поток сильно влияет на время
 void IS_CUTPOINT(int v) {
     //cout << "Cut point: " << v << endl;
@@ -102,7 +101,7 @@ void IS_CUTPOINT(int v) {
 //обход в глубину, работа с матрицей
 /*
 void dfs(int v, int p, int n, bool** g, int timer, bool* visited, int* tin, int* fup) {
-    print_graph(g, n);
+    //print_graph(g, n);
     visited[v] = true;
 	tin[v] = fup[v] = timer++;
 	int children = 0;
@@ -151,70 +150,20 @@ void dfs_list(int v, int p, int n, vector<vector<int>>& g, int timer, bool* visi
 		IS_CUTPOINT(v);
 }
 
-void main_part(int i_, int k_) {
+void empirical_func(int i_, int k_, int m) {
 	int n = 0;
 	int edges = 0;
 	// Проверка на указанных входных данных
-	for (int i = i_; i <= i_ + 5 ; i++) {
-		n = (i + 1) * 100; //Генерация кол-ва вершин !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!113!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	for (int i = i_; i < i_ + 5 ; i++) {
+		n = i * m; //Генерация кол-ва вершин
         //Создание массивов, необходимых для работы алгоритма
 		bool* used = new bool[n]{false};
 		int timer = 0;
 		int* tin = new int[n];
 		int* fup = new int[n];
 		for (int k = k_; k <= k_ + 4; k++) {
-			//edges = rand() % (int)((n - 1) * (0.5*n - 1)) + (n-1) ;//
-            edges = (n - 1) + floor(3.7 * k * k);//Генерация кол-ва ребер
-			//Обнуление массивов, которые заполнялись на предыдущей итерации
-			memset(used, false, n);
-			timer = 0;
-			cout << "Number of vertex: " << n << "  edges: " << edges << endl;
-			bool** matrix = new bool*[n];
-			for (int j = 0; j < n; j++)
-				matrix[j] = new bool[n]{false};
-				//memset(matrix[j], false, n);
-			vector<vector<int>> list;
-			list.resize(n);
-			list.shrink_to_fit();
-			//Генерация входных данных
-            generate_graph(matrix, n, edges);
-			matrix_to_list(list, matrix, n); //Convert matrix to list and delete matrix from memory
-			if (n < 15) print_graph(list, n);//вывод полученного графа
-			//dfs(0, -1, n, matrix, timer, used, tin, fup);
-			unsigned long long sum = 0;
-			for (int t = 0; t < 10; t++) {
-				memset(used, false, n);
-				timer = 0;
-				size_t start = clock();
-				//Вызов самого алгоритма
-				dfs_list(0, -1, n, list, timer, used, tin, fup);
-				size_t end = clock();
-				sum += (end - start);
-				print = false;
-			}
-			cout << "time of execution is " << (sum / 10000.) << " s" << endl << endl;
-			print = true;
-		}
-		delete[] used;
-		delete[] tin;
-		delete[] fup;
-	}
-}
-
-void main_part_double(int i_, int k_) {
-	int n = 0;
-	int edges = 0;
-	// Проверка на указанных входных данных
-	for (int i = i_; i <= i_ + 3; i++) {
-		n = (i) * 100 * 2; //Генерация кол-ва вершин
-		//Создание массивов, необходимых для работы алгоритма
-		bool* used = new bool[n];
-		memset(used, false, n);
-		int timer = 0;
-		int* tin = new int[n];
-		int* fup = new int[n];
-		for (int k = k_; k <= k_ + 4; k++) {
-			edges = (((n - 1) / 2) + floor(3.7 * k * k)) * 2;//Генерация кол-ва ребер
+			edges = rand() % (int)((n - 1) * (0.5*n - 1)) + (n-1) ;//рандомная генерация ребер
+            //edges = (n - 1) + floor(3.7 * k * k);//Генерация кол-ва ребер с шагом
 			//Обнуление массивов, которые заполнялись на предыдущей итерации
 			memset(used, false, n);
 			timer = 0;
@@ -227,12 +176,11 @@ void main_part_double(int i_, int k_) {
 			list.shrink_to_fit();
 			//Генерация входных данных
             generate_graph(matrix, n, edges);
-			matrix_to_list(list, matrix, n); //Convert matrix to list and delete matrix from memory
+			matrix_to_list(list, matrix, n); //Перевод матрицы смежности в список вершин и удаление из памяти
 			if (n < 15) print_graph(list, n);//вывод полученного графа
 			//dfs(0, -1, n, matrix, timer, used, tin, fup);
 			unsigned long long sum = 0;
 			for (int t = 0; t < 10; t++) {
-				//if (t == 0) print_graph(list, n);
 				memset(used, false, n);
 				timer = 0;
 				size_t start = clock();
@@ -253,10 +201,10 @@ void main_part_double(int i_, int k_) {
 
 int main() {
 	cout << "Standart input: " << endl;
-	main_part(1, 10);// запускается на изначальных входных данных
-	cout << endl << endl << endl;
-	//cout << "Input doubled: " << endl;
-	main_part_double(1, 10);// запускается на удвоенных данных
+    empirical_func(1, 10, 100);// запускается на изначальных входных данных
+	cout << endl << endl;
+	cout << "Input doubled: " << endl;
+    empirical_func(1, 10, 200);// запускается на удвоенных данных
 	system("pause");
 	return 0;
 }
