@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include <string.h>
 
-bool print = true;
 using namespace std;
+
 //вывод графа- матрицы в консоль
 void print_graph(bool** matrix, int n) {
 	for (int i = 0; i < n; i++) {
