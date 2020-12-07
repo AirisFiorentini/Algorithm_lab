@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include <string.h>
 
+bool print = true;
 using namespace std;
-
 //вывод графа- матрицы в консоль
 void print_graph(bool** matrix, int n) {
 	for (int i = 0; i < n; i++) {
@@ -206,7 +206,7 @@ void main_part_double(int i_, int k_) {
 	int edges = 0;
 	// Проверка на указанных входных данных
 	for (int i = i_; i <= i_ + 3; i++) {
-		n = (i + 1) * 100 * 2; //Генерация кол-ва вершин
+		n = (i) * 100 * 2; //Генерация кол-ва вершин
 		//Создание массивов, необходимых для работы алгоритма
 		bool* used = new bool[n];
 		memset(used, false, n);
