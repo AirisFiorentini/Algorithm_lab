@@ -8,7 +8,7 @@
 #include <string.h>
 
 bool print = true;
-//const int m = 100; //max 10000
+
 using namespace std;
 //вывод графа- матрицы в консоль
 void print_graph(bool** matrix, int n) {
@@ -150,24 +150,21 @@ void dfs_list(int v, int p, int n, vector<vector<int>>& g, int timer, bool* visi
 		IS_CUTPOINT(v);
 }
 
-void empirical_func(int i_, int k_, int m) {
-	int n = 0;
+void empirical_func(int start, int i_, int k_, int m) {
+	int n = 2;
 	int edges = 0;
+    unsigned long long sum;
 	// Проверка на указанных входных данных
-	for (int i = i_; i < i_ + 5 ; i++) {
-		n = i * m; //Генерация кол-ва вершин
-        //Создание массивов, необходимых для работы алгоритма
+	for (int i = i_; i < i_ + 30; i++) {
+		n *= 2; //start + i * m; //Генерация кол-ва вершин
 		bool* used = new bool[n]{false};
-		int timer = 0;
+		int timer = 0; sum = 0;
 		int* tin = new int[n];
 		int* fup = new int[n];
-		for (int k = k_; k <= k_ + 4; k++) {
-			edges = rand() % (int)((n - 1) * (0.5*n - 1)) + (n-1) ;//рандомная генерация ребер
-            //edges = (n - 1) + floor(3.7 * k * k);//Генерация кол-ва ребер с шагом
-			//Обнуление массивов, которые заполнялись на предыдущей итерации
+		for (int k = k_; k <= k_ + 10; k++) {
+			edges = rand() % (int)((n - 1) * (0.5 * n - 1)) + (n-1);//рандомная генерация ребер
 			memset(used, false, n);
 			timer = 0;
-			cout << "Number of vertex: " << n << "  edges: " << edges << endl;
 			bool** matrix = new bool*[n];
 			for (int j = 0; j < n; j++)
 				matrix[j] = new bool[n]{false};
@@ -177,9 +174,9 @@ void empirical_func(int i_, int k_, int m) {
 			//Генерация входных данных
             generate_graph(matrix, n, edges);
 			matrix_to_list(list, matrix, n); //Перевод матрицы смежности в список вершин и удаление из памяти
-			if (n < 15) print_graph(list, n);//вывод полученного графа
+			//if (n < 15) print_graph(list, n);//вывод полученного графа
 			//dfs(0, -1, n, matrix, timer, used, tin, fup);
-			unsigned long long sum = 0;
+
 			for (int t = 0; t < 10; t++) {
 				memset(used, false, n);
 				timer = 0;
@@ -190,9 +187,11 @@ void empirical_func(int i_, int k_, int m) {
 				sum += (end - start);
 				print = false;
 			}
-			cout << "time of execution is " << (sum / 10000.) << " s" << endl << endl;
-			print = true;
+
+			//print = true;
 		}
+        cout << "Number of vertex: " << n << endl; // << "  edges: " << edges << endl;
+        cout << "Average time of execution is " << (sum / 10.) << " s" << endl << endl;
 		delete[] used;
 		delete[] tin;
 		delete[] fup;
@@ -201,10 +200,10 @@ void empirical_func(int i_, int k_, int m) {
 
 int main() {
 	cout << "Standart input: " << endl;
-    empirical_func(1, 10, 100);// запускается на изначальных входных данных
+    empirical_func(1000, 0, 10, 1000);// запускается на изначальных входных данных
 	cout << endl << endl;
-	cout << "Input doubled: " << endl;
-    empirical_func(1, 10, 200);// запускается на удвоенных данных
+	//cout << "Input doubled: " << endl;
+    //empirical_func(1000, 0, 10, 200);// запускается на удвоенных данных
 	system("pause");
 	return 0;
 }
